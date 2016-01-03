@@ -1,0 +1,9 @@
+body {
+    text-align: center;
+}
+#Score {
+ font-weight: bold;
+ font-family: 'Roboto', sans-serif;
+  font-size: 30px;
+  color: #0000;
+}
