@@ -2,7 +2,7 @@ var Score = function  drawScore() {
     ctx.font = "italic bold 16px Roboto";
     ctx.fillStyle = "#0000";
     ctx.fillText("score: "+ player.score, 1, 100);
-}
+};
 
 // Enemies our player must avoid
 var Enemy = function(y,speed) {
@@ -16,7 +16,7 @@ var Enemy = function(y,speed) {
     this.x = 0;
     this.y = y;
     this.speed = Math.floor(Math.random() * 3 + 2);
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -26,24 +26,33 @@ Enemy.prototype.update = function(dt) {
     if(this.x > 500) {
         this.x = -100;
  }
-}
+};
 
-function checkCollisions() {
+
+function checkCollisions () {
     for (var i = 0; i < allEnemies.length; i++)
 
         if (allEnemies[i].x < player.x + 0 &&
-            allEnemies[i].x + 30 > player.x
-            && allEnemies[i].y < player.y + 10
-            && allEnemies[i].y + player.y + 20)
+            allEnemies[i].x + 30 > player.x && 
+            allEnemies[i].y + player.y + 10 &&
+            allEnemies[i].y > player.y - 20)
         {
             player.reset();
             player.score -= 100;
+        }
+        if (gem.x < player.x + 10 &&
+            gem.x + 20 > player.x && 
+            gem.y > player.y + 10 &&
+            gem.y < player.y - 20)
+        {
+            player.score += 100;
     }
-}
+};
+
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 var Player = function() {
 
@@ -60,7 +69,7 @@ var Player = function() {
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 Player.prototype.update = function() {
     // Sets player boundries and resets when finished!
@@ -71,9 +80,9 @@ Player.prototype.update = function() {
     } else if (this.y > 400) {
         this.y = 400;
     } else if (this.y < 0) {
-        this.y = 0
-        alert("Winner!")
-        player.score += 100;
+        this.y = 0;
+        alert("Winner!");
+        this.score += 100;
         this.reset();
     }
 };
@@ -81,7 +90,7 @@ Player.prototype.update = function() {
 Player.prototype.reset = function() {
     this.x = 200;
     this.y = 400;
-}
+};
 
 // Player movement keys
 Player.prototype.handleInput = function(keys) {
@@ -101,20 +110,26 @@ Player.prototype.handleInput = function(keys) {
 
 var Gem = function (x, y) {
      this.sprite = 'images/gem-blue.png';
-     this.x =  [2, 275, 300];
-     this.y =  [200, 150, 80];
+     this.x = -50;
+     this.y = 300;
+     this.possibleX =  [2, 150, 300];
+     this.possibleY =  [400, 280, 50];
+};
 
- }
+Gem.prototype.update = function () {
+     this.x = this.possibleX[getRandomIntInclusive(0, 5)];
+     this.y = this.possibleY[getRandomIntInclusive(0, 4)];
+};
+
 
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min)) - min;
 }
 
-Gem.prototype.update = function () {
- this.x = Math.floor(Math.random() + 15);
- this.y = Math.floor(Math.random() + 13);
-
-}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -125,7 +140,6 @@ var enemy2 = new Enemy(140);
 var enemy3 = new Enemy(220);
 
 var allEnemies = [enemy1, enemy2, enemy3];
-
 
 var player = new Player();
 
