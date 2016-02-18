@@ -83,6 +83,28 @@
         checkCollisions();
     }
 
+    function checkCollisions () {
+    for (var i = 0; i < allEnemies.length; i++)
+
+        if (allEnemies[i].x < player.x + 0 &&
+            allEnemies[i].x + 30 > player.x && 
+            allEnemies[i].y + player.y + 10 &&
+            allEnemies[i].y > player.y - 20)
+        {
+            player.reset();
+            player.score -= 100;
+        };
+
+    for (var i = 0; i < player.length; i++)
+        if (player[i].x >= gem.x &&
+            player[i].x <= gem.x &&
+             player[i].y >= gem.y &&
+             player[i].y <= gem.y)
+        {
+            player.score += 100;
+    }
+};
+
     /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your

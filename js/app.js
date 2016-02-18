@@ -29,26 +29,6 @@ Enemy.prototype.update = function(dt) {
 };
 
 
-function checkCollisions () {
-    for (var i = 0; i < allEnemies.length; i++)
-
-        if (allEnemies[i].x < player.x + 0 &&
-            allEnemies[i].x + 30 > player.x && 
-            allEnemies[i].y + player.y + 10 &&
-            allEnemies[i].y > player.y - 20)
-        {
-            player.reset();
-            player.score -= 100;
-        }
-        if (gem.x < player.x + 10 &&
-            gem.x + 20 > player.x && 
-            gem.y > player.y + 10 &&
-            gem.y < player.y - 20)
-        {
-            player.score += 100;
-    }
-};
-
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -108,23 +88,38 @@ Player.prototype.handleInput = function(keys) {
     }
 };
 
-var Gem = function (x, y) {
-     this.sprite = 'images/gem-blue.png';
-     this.x = -50;
-     this.y = 300;
-     this.possibleX =  [2, 150, 300];
-     this.possibleY =  [400, 280, 50];
+setmoveflag = function () {
+    this.movegemflag = true;
+    window.setTimeout (setmoveflag.bind(this), 500);
+    console.log ("here")
 };
 
+var Gem = function (x, y) {
+     this.sprite = 'images/gem-blue.png';
+     this.x = 50;
+     this.y = 300;
+     this.possibleX =  [10, 80, 300, 600];
+     this.possibleY =  [400, 300, 100];
+     this.movegemflag = false; 
+     window.setTimeout (setmoveflag.bind(this), 500);
+};
+
+
 Gem.prototype.update = function () {
-     this.x = this.possibleX[getRandomIntInclusive(0, 5)];
-     this.y = this.possibleY[getRandomIntInclusive(0, 4)];
+    if (this.movegemflag) 
+    {
+     this.x = this.possibleX[getRandomIntInclusive(0, 3)];
+     this.y = this.possibleY[getRandomIntInclusive(0, 3)];
+     this.movegemflag = false;
+     console.log (this.x + ", " + this.y);
+    }
 };
 
 
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
 
 function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min)) - min;
